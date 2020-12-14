@@ -39,9 +39,8 @@ namespace Vending
         // Find a product by name. Results should be ordered by name)
         public List<Product> SearchByName(string nameCriteria)
         {
-            throw new NotImplementedException();
-            // IEnumerable<Product> sortedProducts = _products.Find(product => product.Name == nameCriteria);
-            // return sortedProducts.ToList();
+           IEnumerable<Product> namedProduct = _products.Where(product => product.Name.ToLower().Contains(nameCriteria)).OrderBy(product => product.Name);
+            return namedProduct.ToList();
         }
 
         // Find a product between a range or prices. Results should be ordered by price
@@ -55,25 +54,30 @@ namespace Vending
         // Return a product with a given ID. Return null if not found.
         public Product GetById(int id)
         {
-            throw new NotImplementedException();
+            Product productById = _products.Find(product => product.Id == id);
+            return productById;
         }
 
         // Return the cheapest product or null if there are no products
         public Product GetCheapest()
         {
-            throw new NotImplementedException();
+            Product cheapestProduct = _products.OrderBy(product => product.Price).FirstOrDefault();
+            return cheapestProduct;
         }
 
         // Return the most expensive product or null if there are no products
         public Product GetMostExpensive()
         {
-            throw new NotImplementedException();
+            Product expensiveProduct = _products.OrderByDescending(product => product.Price).FirstOrDefault();
+            return expensiveProduct;
         }
 
         // Return all the product names in alphabetical ordere
         public List<string> GetProductNames()
         {
-            throw new NotImplementedException();
+            IEnumerable<Product> sortedProductNames = _products.OrderBy(product => product.Name);
+            IEnumerable<string> productNames = sortedProductNames.Select(product => product.Name);
+            return productNames.ToList();
         }
 
         // Property to represent the total of all the products' prices.
@@ -81,7 +85,8 @@ namespace Vending
         {
             get
             {
-                throw new NotImplementedException();
+                double totalValue = _products.Sum(product => product.Price);
+                return totalValue;
             }
         }
     }
